@@ -1,3 +1,5 @@
+import { employees } from "./employees.js";
+
 function App() {
   return (
     <main>
@@ -22,27 +24,18 @@ function App() {
           </thead>
 
           <tbody>
-            <tr>
-              <td>Иванов Иван Иванович</td>
-              <td>—</td>
-              <td>—</td>
-              <td>—</td>
-              <td>—</td>
-              <td>—</td>
-              <td>—</td>
-              <td>—</td>
-            </tr>
-
-            <tr>
-              <td>Петрова Анна Сергеевна</td>
-              <td>—</td>
-              <td>—</td>
-              <td>—</td>
-              <td>—</td>
-              <td>—</td>
-              <td>—</td>
-              <td>—</td>
-            </tr>
+            {employees.map((employee) => (
+               <tr key={employee.id}>
+                <td>{employee.employeeName}</td>
+                <td>—</td>
+                <td>—</td>
+                <td>—</td>
+                <td>—</td>
+                <td>—</td>
+                <td>—</td>
+                <td>—</td>
+              </tr>
+          ))}
           </tbody>
         </table>
       </div>
