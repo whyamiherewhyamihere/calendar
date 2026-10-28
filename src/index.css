@@ -28,3 +28,9 @@ td {
 th {
   background: #f5f7fb;
 }
+
+.month-controls {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
