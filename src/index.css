@@ -34,3 +34,30 @@ th {
   align-items: center;
   gap: 15px;
 }
+
+.absence-cell {
+  padding: 0;
+}
+
+.absence-select {
+  width: 100%;
+  min-width: 48px;
+  padding: 12px 4px;
+  border: none;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.sick {
+  background: #f90303;
+}
+
+.vacation {
+  background: #026bf5;
+}
+
+.trip {
+  background: #f9c802;
+}
