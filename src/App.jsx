@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { employees } from "./employees.js";
-import { months, getDays } from "./calendar.js";
+import { months, getDays, getInitialAbsences } from "./calendar.js";
 
 function App() {
   const [year, setYear] = useState(2026);
   const [month, setMonth] = useState(9);
-  const [selectedAbsences, setSelectedAbsences] = useState({});
+  const [selectedAbsences, setSelectedAbsences] = useState(() =>
+    getInitialAbsences(employees)
+  );
 
   const days = getDays(year, month);
 
@@ -51,11 +53,13 @@ function App() {
                 <td>{employee.employeeName}</td>
 
                 {days.map((day) => {
-                  const cellKey = `${employee.id}-${year}-${month}-${day}`;
+                  const cellKey =
+                    employee.id + "-" + year + "-" + month + "-" + day;
+
                   const type = selectedAbsences[cellKey] || "";
 
                   return (
-                    <td key={day} className={`absence-cell ${type}`}>
+                    <td key={day} className={"absence-cell " + type}>
                       <select
                         className="absence-select"
                         aria-label="Тип отсутствия"
