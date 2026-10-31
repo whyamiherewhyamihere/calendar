@@ -5,9 +5,16 @@ import { months, getDays, getInitialAbsences } from "./calendar.js";
 function App() {
   const [year, setYear] = useState(2026);
   const [month, setMonth] = useState(9);
-  const [selectedAbsences, setSelectedAbsences] = useState(() =>
-    getInitialAbsences(employees)
-  );
+
+  const [selectedAbsences, setSelectedAbsences] = useState(() => {
+    const saved = localStorage.getItem("calendar-absences");
+
+    if (saved) {
+      return JSON.parse(saved);
+    }
+
+    return getInitialAbsences(employees);
+  });
 
   const days = getDays(year, month);
 
@@ -16,6 +23,18 @@ function App() {
 
     setMonth(date.getMonth());
     setYear(date.getFullYear());
+  }
+
+  function changeAbsence(cellKey, type) {
+    const newAbsences = { ...selectedAbsences };
+
+    newAbsences[cellKey] = type;
+
+    setSelectedAbsences(newAbsences);
+
+    const saved = JSON.stringify(newAbsences);
+
+    localStorage.setItem("calendar-absences", saved);
   }
 
   return (
@@ -65,10 +84,7 @@ function App() {
                         aria-label="Тип отсутствия"
                         value={type}
                         onChange={(event) =>
-                          setSelectedAbsences({
-                            ...selectedAbsences,
-                            [cellKey]: event.target.value
-                          })
+                          changeAbsence(cellKey, event.target.value)
                         }
                       >
                         <option value="">—</option>
