@@ -58,10 +58,10 @@ function App() {
         <table className="calendar-table">
           <thead>
             <tr>
-              <th>Сотрудник</th>
+              <th className="employee-name">Сотрудник</th>
 
               {days.map((day) => (
-                <th key={day}>{day}</th>
+                <th key={day} className="day-number">{day}</th>
               ))}
             </tr>
           </thead>
@@ -69,7 +69,7 @@ function App() {
           <tbody>
             {employees.map((employee) => (
               <tr key={employee.id}>
-                <td>{employee.employeeName}</td>
+                <td className="employee-name">{employee.employeeName}</td>
 
                 {days.map((day) => {
                   const cellKey =
