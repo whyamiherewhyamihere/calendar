@@ -7,13 +7,17 @@ function App() {
   const [month, setMonth] = useState(9);
 
   const [selectedAbsences, setSelectedAbsences] = useState(() => {
+    const initialAbsences = getInitialAbsences(employees);
     const saved = localStorage.getItem("calendar-absences");
 
     if (saved) {
-      return JSON.parse(saved);
+      const savedAbsences = JSON.parse(saved);
+      const result = { ...initialAbsences, ...savedAbsences };
+
+      return result;
     }
 
-    return getInitialAbsences(employees);
+    return initialAbsences;
   });
 
   const days = getDays(year, month);
@@ -43,16 +47,41 @@ function App() {
       <p>Отпуска, командировки и больничные сотрудников</p>
 
       <div className="month-controls">
-        <button onClick={() => changeMonth(-1)}>Назад</button>
+        <button
+          onClick={() => changeMonth(-1)}
+          aria-label="Предыдущий месяц"
+        >
+          &lt;
+        </button>
 
         <h2>
           {months[month]} {year}
         </h2>
 
-        <button onClick={() => changeMonth(1)}>Вперёд</button>
-      </div>
+        <button
+          onClick={() => changeMonth(1)}
+          aria-label="Следующий месяц"
+        >
+          &gt;
+        </button>
 
-      <p>Б — больничный, О — отпуск, К — командировка</p>
+        <div className="legend">
+          <div className="legend-item">
+            <span className="legend-mark vacation">О</span>
+            <span>Отпуск</span>
+          </div>
+
+          <div className="legend-item">
+            <span className="legend-mark trip">К</span>
+            <span>Командировка</span>
+          </div>
+
+          <div className="legend-item">
+            <span className="legend-mark sick">Б</span>
+            <span>Больничный</span>
+          </div>
+        </div>
+      </div>
 
       <div className="calendar">
         <table className="calendar-table">
@@ -61,7 +90,9 @@ function App() {
               <th className="employee-name">Сотрудник</th>
 
               {days.map((day) => (
-                <th key={day} className="day-number">{day}</th>
+                <th key={day} className="day-number">
+                  {day}
+                </th>
               ))}
             </tr>
           </thead>
@@ -69,7 +100,9 @@ function App() {
           <tbody>
             {employees.map((employee) => (
               <tr key={employee.id}>
-                <td className="employee-name">{employee.employeeName}</td>
+                <td className="employee-name">
+                  {employee.employeeName}
+                </td>
 
                 {days.map((day) => {
                   const cellKey =
@@ -78,20 +111,22 @@ function App() {
                   const type = selectedAbsences[cellKey] || "";
 
                   return (
-                    <td key={day} className={"absence-cell " + type}>
-                      <select
-                        className="absence-select"
-                        aria-label="Тип отсутствия"
-                        value={type}
-                        onChange={(event) =>
-                          changeAbsence(cellKey, event.target.value)
-                        }
-                      >
-                        <option value="">—</option>
-                        <option value="sick">Б</option>
-                        <option value="vacation">О</option>
-                        <option value="trip">К</option>
-                      </select>
+                    <td key={day} className="absence-cell">
+                      <div className="cell-content">
+                        <select
+                          className={"absence-select " + type}
+                          aria-label="Тип отсутствия"
+                          value={type}
+                          onChange={(event) =>
+                            changeAbsence(cellKey, event.target.value)
+                          }
+                        >
+                          <option value=""></option>
+                          <option value="vacation">О</option>
+                          <option value="trip">К</option>
+                          <option value="sick">Б</option>
+                        </select>
+                      </div>
                     </td>
                   );
                 })}
